@@ -1,5 +1,6 @@
 export * from "./WelcomeScreen"
 
+export * from "./SignupScreen"
 export * from "./LoginScreen"
 export * from "./DemoCommunityScreen"
 export * from "./DemoDebugScreen"

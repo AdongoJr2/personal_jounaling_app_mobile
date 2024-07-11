@@ -6,9 +6,11 @@ import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
 
-interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
+interface LoginScreenProps extends AppStackScreenProps<"Login"> { }
 
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_props) {
+  const { navigation } = _props
+
   const authPasswordInput = useRef<TextInput>(null)
 
   const [authPassword, setAuthPassword] = useState("")
@@ -66,6 +68,10 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     [isAuthPasswordHidden],
   )
 
+  const navigateToSignup = () => {
+    navigation.navigate("Signup");
+  }
+
   return (
     <Screen
       preset="auto"
@@ -113,6 +119,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         preset="reversed"
         onPress={login}
       />
+
+      <Text tx="loginScreen.signupInstead" preset="subheading" style={$signUpInstead} onPress={() => navigateToSignup()} />
     </Screen>
   )
 })
@@ -128,6 +136,12 @@ const $signIn: TextStyle = {
 
 const $enterDetails: TextStyle = {
   marginBottom: spacing.lg,
+}
+
+const $signUpInstead: TextStyle = {
+  marginBottom: spacing.lg,
+  marginTop: 15,
+  textAlign: "center",
 }
 
 const $hint: TextStyle = {

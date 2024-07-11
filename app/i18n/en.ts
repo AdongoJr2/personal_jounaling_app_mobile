@@ -4,6 +4,18 @@ const en = {
     cancel: "Cancel",
     back: "Back",
     logOut: "Log Out",
+    firstNameFieldLabel: "First Name",
+    lastNameFieldLabel: "Last Name",
+    usernameFieldLabel: "Username",
+    emailFieldLabel: "Email",
+    phoneNumberFieldLabel: "Phone Number",
+    passwordFieldLabel: "Password",
+    emailFieldPlaceholder: "Enter your email address",
+    firstNameFieldPlaceholder: "Enter your first name",
+    lastNameFieldPlaceholder: "Enter your last name",
+    usernameFieldPlaceholder: "Enter your username",
+    phoneNumberFieldPlaceholder: "Enter your phone number",
+    passwordFieldPlaceholder: "Enter your password",
   },
   welcomeScreen: {
     postscript:
@@ -39,6 +51,12 @@ const en = {
     emailFieldPlaceholder: "Enter your email address",
     passwordFieldPlaceholder: "Super secret password here",
     tapToSignIn: "Tap to sign in!",
+    hint: "Hint: you can use any email address and your favorite password :)",
+    signupInstead: "Sign Up",
+  },
+  signupScreen: {
+    signUp: "Sign Up",
+    enterDetails: "Enter your details below to create an account",
     hint: "Hint: you can use any email address and your favorite password :)",
   },
   demoNavigator: {
