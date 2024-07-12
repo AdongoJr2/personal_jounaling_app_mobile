@@ -8,7 +8,7 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import Config from "../../config"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import type { ApiConfig, ApiFeedResponse } from "./api.types"
+import type { ApiConfig, ApiFeedResponse, ApiSingleResponse } from "./api.types"
 import type { EpisodeSnapshotIn } from "../../models/Episode"
 
 /**
@@ -70,6 +70,34 @@ export class Api {
     } catch (e) {
       if (__DEV__ && e instanceof Error) {
         console.error(`Bad data: ${e.message}\n${response.data}`, e.stack)
+      }
+      return { kind: "bad-data" }
+    }
+  }
+
+  async registerUser(payload: any): Promise<{ kind: "ok" } & { data?: ApiSingleResponse } | GeneralApiProblem & { data?: ApiSingleResponse }> {
+    // make the api call
+    const response: ApiResponse<ApiSingleResponse> = await this.apisauce.post(
+      `auth/signup`,
+      payload,
+    )
+
+    console.log("API RESPONSE ::", response.data)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return { ...problem, data: response.data }
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawData = response.data
+      console.log(rawData)
+      return { kind: "ok", data: response.data }
+    } catch (e) {
+      if (__DEV__ && e instanceof Error) {
+        console.error(`API Error: ${e.message}\n${response.data}`, e.stack)
       }
       return { kind: "bad-data" }
     }

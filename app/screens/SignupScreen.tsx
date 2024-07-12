@@ -5,6 +5,7 @@ import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
+import Toast from 'react-native-root-toast';
 
 interface SignupScreenProps extends AppStackScreenProps<"Signup"> { }
 
@@ -22,10 +23,7 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
   const [authEmail, setAuthEmail] = useState("")
   const [authPassword, setAuthPassword] = useState("")
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const {
-    authenticationStore: { validationError },
-  } = useStores()
+  const { authenticationStore } = useStores()
 
   useEffect(() => {
     // Return a "cleanup" function that React will run when the component unmounts
@@ -35,13 +33,33 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     }
   }, [])
 
-  const error = isSubmitted ? validationError : ""
+  console.log("Registration Success ::", authenticationStore.registrationSuccess)
+
+  const navigateToLogin = () => {
+    navigation.navigate("Login");
+  }
+
+  if (authenticationStore.registrationSuccess) {
+    Toast.show("User account created successfully", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.TOP,
+    })
+
+    navigateToLogin()
+  }
+
+  // useEffect(() => {
+  //   if (authenticationStore.registrationSuccess) {
+  //     Toast.show("User account created successfully", {
+  //       duration: Toast.durations.LONG,
+  //       position: Toast.positions.TOP,
+  //     })
+
+  //     navigateToLogin()
+  //   }
+  // }, [])
 
   async function signup() {
-    setIsSubmitted(true)
-
-    if (validationError) return
-
     const payload = {
       firstName: authFirstName.trim(),
       lastName: authLastName.trim(),
@@ -51,16 +69,13 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
       password: authPassword.trim(),
     }
 
-    console.log(payload);
+    try {
+      console.log(payload)
 
-    setIsSubmitted(false)
-
-    navigateToLogin()
-
-  }
-
-  const navigateToLogin = () => {
-    navigation.navigate("Login");
+      await authenticationStore.registerUser(payload)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
@@ -99,8 +114,8 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
         keyboardType="default"
         labelTx="common.firstNameFieldLabel"
         placeholderTx="common.firstNameFieldPlaceholder"
-        helper={error}
-        status={error ? "error" : undefined}
+        // helper={error}
+        // status={error ? "error" : undefined}
         onSubmitEditing={() => authLastNameInput.current?.focus()}
       />
 
@@ -115,8 +130,8 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
         keyboardType="default"
         labelTx="common.lastNameFieldLabel"
         placeholderTx="common.lastNameFieldPlaceholder"
-        helper={error}
-        status={error ? "error" : undefined}
+      // helper={error}
+      // status={error ? "error" : undefined}
       />
 
       <TextField
@@ -129,8 +144,8 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
         keyboardType="default"
         labelTx="common.usernameFieldLabel"
         placeholderTx="common.usernameFieldPlaceholder"
-        helper={error}
-        status={error ? "error" : undefined}
+      // helper={error}
+      // status={error ? "error" : undefined}
       />
 
       <TextField
@@ -143,8 +158,8 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
         keyboardType="phone-pad"
         labelTx="common.phoneNumberFieldLabel"
         placeholderTx="common.phoneNumberFieldPlaceholder"
-        helper={error}
-        status={error ? "error" : undefined}
+      // helper={error}
+      // status={error ? "error" : undefined}
       />
 
       <TextField
@@ -157,8 +172,8 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
         keyboardType="email-address"
         labelTx="common.emailFieldLabel"
         placeholderTx="common.emailFieldPlaceholder"
-        helper={error}
-        status={error ? "error" : undefined}
+        // helper={error}
+        // status={error ? "error" : undefined}
         onSubmitEditing={() => authPasswordInput.current?.focus()}
       />
 

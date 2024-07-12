@@ -34,6 +34,12 @@ export interface ApiFeedResponse {
   items: EpisodeItem[]
 }
 
+export interface ApiSingleResponse {
+  status: "success" | "error"
+  message: string;
+  data?: any;
+}
+
 /**
  * The options used to configure apisauce.
  */
